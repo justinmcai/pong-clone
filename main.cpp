@@ -313,94 +313,200 @@ void update()
     g_previous_ticks = ticks;
     float sign = 1.0f;
 
-    //-------------------------------------------------------BALL-------------------------------------------------------
-    //start ball
-    if (g_ball_movement == glm::vec3(0.0f, 0.0f, 0.0f)) {
-        g_ball_movement = glm::vec3(-1.0f, 1.0f, 0.0f);
-    }
-    //bounce ball top
-    if (INIT_POS_BALL.y + g_ball_position.y >= 3.7f) {
-        g_ball_movement.y = -1.0f;
-    }
-    //bounce ball bottom
-    if (INIT_POS_BALL.y + g_ball_position.y <= -3.7f) {
-        g_ball_movement.y = 1.0f;
-    }
-    //end game right side lose
-    if (INIT_POS_BALL.x + g_ball_position.x >= 5.0f) {
-        //g_ball_movement.x = -1.0f;
-        g_ball_movement.x = 0.0f;
-        g_ball_movement.y = 0.0f;
-        g_game_status = WINNER1;
-    }
-    //end game left side lose
-    if (INIT_POS_BALL.x + g_ball_position.x <= -5.0f) {
-        //g_ball_movement.x = 1.0f;
-        g_ball_movement.x = 0.0f;
-        g_ball_movement.y = 0.0f;
-        g_game_status = WINNER2;
-    }
-    //right paddle and ball
-    float x_distance_kano = fabs(g_kano_position.x + INIT_POS_KANO.x - g_ball_position.x) -
-        ((INIT_SCALE.x + INIT_BALL_SCALE.x) / 2.0f);
+    if (g_game_status == START) {
+        //-------------------------------------------------------BALL1-------------------------------------------------------
+        //start ball
+        if (g_ball_movement == glm::vec3(0.0f, 0.0f, 0.0f)) {
+            g_ball_movement = glm::vec3(-1.0f, 1.0f, 0.0f);
+        }
+        //bounce ball top
+        if (INIT_POS_BALL.y + g_ball_position.y >= 3.7f) {
+            g_ball_movement.y = -1.0f;
+        }
+        //bounce ball bottom
+        if (INIT_POS_BALL.y + g_ball_position.y <= -3.7f) {
+            g_ball_movement.y = 1.0f;
+        }
+        //end game right side lose
+        if (INIT_POS_BALL.x + g_ball_position.x >= 5.0f) {
+            //g_ball_movement.x = -1.0f;
+            g_ball_movement.x = 0.0f;
+            g_ball_movement.y = 0.0f;
+            g_game_status = WINNER1;
+        }
+        //end game left side lose
+        if (INIT_POS_BALL.x + g_ball_position.x <= -5.0f) {
+            //g_ball_movement.x = 1.0f;
+            g_ball_movement.x = 0.0f;
+            g_ball_movement.y = 0.0f;
+            g_game_status = WINNER2;
+        }
+        //right paddle and ball
+        float x_distance_kano = fabs(g_kano_position.x + INIT_POS_KANO.x - g_ball_position.x) -
+            ((INIT_SCALE.x + INIT_BALL_SCALE.x) / 2.0f);
 
-    float y_distance_kano = fabs(g_kano_position.y + INIT_POS_KANO.y - g_ball_position.y) -
-        ((INIT_SCALE.y + INIT_BALL_SCALE.y) / 2.0f);
+        float y_distance_kano = fabs(g_kano_position.y + INIT_POS_KANO.y - g_ball_position.y) -
+            ((INIT_SCALE.y + INIT_BALL_SCALE.y) / 2.0f);
 
-    if (x_distance_kano < 0.0f && y_distance_kano < 0.0f)
-    {
-        g_ball_movement.x = -1.0f;
-    }
-    //left paddle and ball
-    float x_distance_mahiru = fabs(g_mahiru_position.x + INIT_POS_MAHIRU.x - g_ball_position.x) -
-        ((INIT_SCALE.x + INIT_BALL_SCALE.x) / 2.0f);
+        if (x_distance_kano < 0.0f && y_distance_kano < 0.0f)
+        {
+            g_ball_movement.x = -1.0f;
+        }
+        //left paddle and ball
+        float x_distance_mahiru = fabs(g_mahiru_position.x + INIT_POS_MAHIRU.x - g_ball_position.x) -
+            ((INIT_SCALE.x + INIT_BALL_SCALE.x) / 2.0f);
 
-    float y_distance_mahiru = fabs(g_mahiru_position.y + INIT_POS_MAHIRU.y - g_ball_position.y) -
-        ((INIT_SCALE.y + INIT_BALL_SCALE.y) / 2.0f);
+        float y_distance_mahiru = fabs(g_mahiru_position.y + INIT_POS_MAHIRU.y - g_ball_position.y) -
+            ((INIT_SCALE.y + INIT_BALL_SCALE.y) / 2.0f);
 
-    if (x_distance_mahiru < 0.0f && y_distance_mahiru < 0.0f)
-    {
-        g_ball_movement.x = 1.0f;
-    }
-    //move ball :: add direction * units per second * elapsed time
-    g_ball_position += g_ball_movement * g_ball_speed * delta_time;
+        if (x_distance_mahiru < 0.0f && y_distance_mahiru < 0.0f)
+        {
+            g_ball_movement.x = 1.0f;
+        }
+        //move ball :: add direction * units per second * elapsed time
+        g_ball_position += g_ball_movement * g_ball_speed * delta_time;
         //LOG
-    std::cout << "x = " << INIT_POS_BALL.x + g_ball_position.x << ": y = " << INIT_POS_BALL.y + g_ball_position.y << std::endl;
+        std::cout << "x = " << INIT_POS_BALL.x + g_ball_position.x << ": y = " << INIT_POS_BALL.y + g_ball_position.y << std::endl;
+        //-------------------------------------------------------BALL2-------------------------------------------------------
+        if (g_num_balls == TWO || g_num_balls == THREE) {
+            //start ball
+            if (g_ball2_movement == glm::vec3(0.0f, 0.0f, 0.0f)) {
+                g_ball2_movement = glm::vec3(1.0f, 1.0f, 0.0f);
+            }
+            //bounce ball top
+            if (INIT_POS_BALL.y + g_ball2_position.y >= 3.7f) {
+                g_ball2_movement.y = -1.0f;
+            }
+            //bounce ball bottom
+            if (INIT_POS_BALL.y + g_ball2_position.y <= -3.7f) {
+                g_ball2_movement.y = 1.0f;
+            }
+            //end game right side lose
+            if (INIT_POS_BALL.x + g_ball2_position.x >= 5.0f) {
+                //g_ball2_movement.x = -1.0f;
+                g_ball2_movement.x = 0.0f;
+                g_ball2_movement.y = 0.0f;
+                g_game_status = WINNER1;
+            }
+            //end game left side lose
+            if (INIT_POS_BALL.x + g_ball2_position.x <= -5.0f) {
+                //g_ball2_movement.x = 1.0f;
+                g_ball2_movement.x = 0.0f;
+                g_ball2_movement.y = 0.0f;
+                g_game_status = WINNER2;
+            }
+            //right paddle and ball
+            float x_distance_kano2 = fabs(g_kano_position.x + INIT_POS_KANO.x - g_ball2_position.x) -
+                ((INIT_SCALE.x + INIT_BALL_SCALE.x) / 2.0f);
 
-    //------------------------------------------------------PADDLE------------------------------------------------------
-    //right paddle and border
-    if (INIT_POS_KANO.y + g_kano_position.y <= 3.0f && INIT_POS_KANO.y + g_kano_position.y >= -3.0f)
-    {
-        if (g_game_mode == SINGLE) {
-            g_kano_movement.y = 1.0f;
-        }
-        g_kano_position += sign * g_kano_movement * g_kano_speed * delta_time;
-        //std::cout << "y = " << INIT_POS_KANO.y + g_kano_position.y << std::endl;
-    }
-    else if (INIT_POS_KANO.y + g_kano_position.y >= 3.0f){
-        g_kano_position.y = 2.99999999999f;
-        if (g_game_mode == SINGLE) {
-            sign *= -1.0f;
-        }
-    }
-    else {
-        g_kano_position.y = -2.99999999999f;
-        if (g_game_mode == SINGLE) {
-            sign *= -1.0f;
-        }
-    }
-    //left paddle and border
-    if (INIT_POS_MAHIRU.y + g_mahiru_position.y <= 3.0f && INIT_POS_MAHIRU.y + g_mahiru_position.y >= -3.0f)
-    {
-        g_mahiru_position += g_mahiru_movement * g_kano_speed * delta_time;
-    }
-    else if (INIT_POS_MAHIRU.y + g_mahiru_position.y >= 3.0f) {
-        g_mahiru_position.y = 2.9999999999f;
-    }
-    else {
-        g_mahiru_position.y = -2.99999999999f;
-    }
+            float y_distance_kano2 = fabs(g_kano_position.y + INIT_POS_KANO.y - g_ball2_position.y) -
+                ((INIT_SCALE.y + INIT_BALL_SCALE.y) / 2.0f);
 
+            if (x_distance_kano2 < 0.0f && y_distance_kano2 < 0.0f)
+            {
+                g_ball2_movement.x = -1.0f;
+            }
+            //left paddle and ball
+            float x_distance_mahiru2 = fabs(g_mahiru_position.x + INIT_POS_MAHIRU.x - g_ball2_position.x) -
+                ((INIT_SCALE.x + INIT_BALL_SCALE.x) / 2.0f);
+
+            float y_distance_mahiru2 = fabs(g_mahiru_position.y + INIT_POS_MAHIRU.y - g_ball2_position.y) -
+                ((INIT_SCALE.y + INIT_BALL_SCALE.y) / 2.0f);
+
+            if (x_distance_mahiru2 < 0.0f && y_distance_mahiru2 < 0.0f)
+            {
+                g_ball2_movement.x = 1.0f;
+            }
+            //move ball :: add direction * units per second * elapsed time
+            g_ball2_position += g_ball2_movement * g_ball_speed * delta_time;
+        }
+        //-------------------------------------------------------BALL3-------------------------------------------------------
+        if (g_num_balls == THREE) {
+            //start ball
+            if (g_ball3_movement == glm::vec3(0.0f, 0.0f, 0.0f)) {
+                g_ball3_movement = glm::vec3(-1.0f, -1.0f, 0.0f);
+            }
+            //bounce ball top
+            if (INIT_POS_BALL.y + g_ball3_position.y >= 3.7f) {
+                g_ball3_movement.y = -1.0f;
+            }
+            //bounce ball bottom
+            if (INIT_POS_BALL.y + g_ball3_position.y <= -3.7f) {
+                g_ball3_movement.y = 1.0f;
+            }
+            //end game right side lose
+            if (INIT_POS_BALL.x + g_ball3_position.x >= 5.0f) {
+                //g_ball3_movement.x = -1.0f;
+                g_ball3_movement.x = 0.0f;
+                g_ball3_movement.y = 0.0f;
+                g_game_status = WINNER1;
+            }
+            //end game left side lose
+            if (INIT_POS_BALL.x + g_ball3_position.x <= -5.0f) {
+                //g_ball_movement.x = 1.0f;
+                g_ball3_movement.x = 0.0f;
+                g_ball3_movement.y = 0.0f;
+                g_game_status = WINNER2;
+            }
+            //right paddle and ball
+            float x_distance_kano3 = fabs(g_kano_position.x + INIT_POS_KANO.x - g_ball3_position.x) -
+                ((INIT_SCALE.x + INIT_BALL_SCALE.x) / 2.0f);
+
+            float y_distance_kano3 = fabs(g_kano_position.y + INIT_POS_KANO.y - g_ball3_position.y) -
+                ((INIT_SCALE.y + INIT_BALL_SCALE.y) / 2.0f);
+
+            if (x_distance_kano3 < 0.0f && y_distance_kano3 < 0.0f)
+            {
+                g_ball3_movement.x = -1.0f;
+            }
+            //left paddle and ball
+            float x_distance_mahiru3 = fabs(g_mahiru_position.x + INIT_POS_MAHIRU.x - g_ball3_position.x) -
+                ((INIT_SCALE.x + INIT_BALL_SCALE.x) / 2.0f);
+
+            float y_distance_mahiru3 = fabs(g_mahiru_position.y + INIT_POS_MAHIRU.y - g_ball3_position.y) -
+                ((INIT_SCALE.y + INIT_BALL_SCALE.y) / 2.0f);
+
+            if (x_distance_mahiru3 < 0.0f && y_distance_mahiru3 < 0.0f)
+            {
+                g_ball3_movement.x = 1.0f;
+            }
+            //move ball :: add direction * units per second * elapsed time
+            g_ball3_position += g_ball3_movement * g_ball_speed * delta_time;
+        }
+        //------------------------------------------------------PADDLE------------------------------------------------------
+        //right paddle and border
+        if (INIT_POS_KANO.y + g_kano_position.y <= 3.0f && INIT_POS_KANO.y + g_kano_position.y >= -3.0f)
+        {
+            if (g_game_mode == SINGLE) {
+                g_kano_movement.y = 1.0f;
+            }
+            g_kano_position += sign * g_kano_movement * g_kano_speed * delta_time;
+            //std::cout << "y = " << INIT_POS_KANO.y + g_kano_position.y << std::endl;
+        }
+        else if (INIT_POS_KANO.y + g_kano_position.y >= 3.0f) {
+            g_kano_position.y = 2.99999999999f;
+            if (g_game_mode == SINGLE) {
+                sign *= -1.0f;
+            }
+        }
+        else {
+            g_kano_position.y = -2.99999999999f;
+            if (g_game_mode == SINGLE) {
+                sign *= -1.0f;
+            }
+        }
+        //left paddle and border
+        if (INIT_POS_MAHIRU.y + g_mahiru_position.y <= 3.0f && INIT_POS_MAHIRU.y + g_mahiru_position.y >= -3.0f)
+        {
+            g_mahiru_position += g_mahiru_movement * g_kano_speed * delta_time;
+        }
+        else if (INIT_POS_MAHIRU.y + g_mahiru_position.y >= 3.0f) {
+            g_mahiru_position.y = 2.9999999999f;
+        }
+        else {
+            g_mahiru_position.y = -2.99999999999f;
+        }
+    }
     //Regular update stuff
     g_kano_matrix = glm::mat4(1.0f);
     g_kano_matrix = glm::translate(g_kano_matrix, INIT_POS_KANO);
@@ -417,6 +523,21 @@ void update()
     g_kano_matrix = glm::scale(g_kano_matrix, INIT_SCALE);
     g_mahiru_matrix = glm::scale(g_mahiru_matrix, INIT_SCALE);
     g_ball_matrix = glm::scale(g_ball_matrix, INIT_BALL_SCALE);
+    
+    //other balls
+    if (g_num_balls == TWO || g_num_balls == THREE) {
+        g_ball2_matrix = glm::mat4(1.0f);
+        g_ball2_matrix = glm::translate(g_ball2_matrix, INIT_POS_BALL);
+        g_ball2_matrix = glm::translate(g_ball2_matrix, g_ball2_position);
+        g_ball2_matrix = glm::scale(g_ball2_matrix, INIT_BALL_SCALE);
+    }
+    if (g_num_balls == THREE) {
+        g_ball3_matrix = glm::mat4(1.0f);
+        g_ball3_matrix = glm::translate(g_ball3_matrix, INIT_POS_BALL);
+        g_ball3_matrix = glm::translate(g_ball3_matrix, g_ball3_position);
+        g_ball3_matrix = glm::scale(g_ball3_matrix, INIT_BALL_SCALE);
+    }
+    //game over
     if (g_game_status == WINNER1) {
         g_p1_matrix = glm::mat4(1.0f);
         g_p1_matrix = glm::scale(g_p1_matrix, INIT_TEXT_SCALE);
@@ -460,11 +581,10 @@ void render() {
     draw_object(g_kano_matrix, g_kano_texture_id);
     draw_object(g_mahiru_matrix, g_mahiro_texture_id);
     draw_object(g_ball_matrix, g_ball_texture_id);
-    if (g_num_balls == TWO) {
+    if (g_num_balls == TWO || g_num_balls == THREE) {
         draw_object(g_ball2_matrix, g_ball_texture_id);
     }
     if (g_num_balls == THREE) {
-        draw_object(g_ball2_matrix, g_ball_texture_id);
         draw_object(g_ball3_matrix, g_ball_texture_id);
     }
     if (g_game_status == WINNER1) {
